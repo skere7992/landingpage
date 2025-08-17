@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Crash - Professional C# .NET Developer specializing in Rust game plugins, Harmony framework, and UI development">
     <meta name="keywords" content="C# developer, .NET, Rust plugins, Harmony framework, UI development, game development">
-    <title>Crash | C# .NET & Rust Plugin Developer</title>
+    <title>crashplugins.space</title>
 
     <style>
         * {
@@ -2009,6 +2009,66 @@
             this.parentElement.appendChild(fallback);
         });
     });
+
+    // Typewriter effect for page title
+    (function() {
+        const titles = [
+            "crashplugins.space",
+            "rust plugin developer",
+            "c# .net developer geek",
+            "harmony patcher",
+            "ui enjoyer",
+            "mr david gei"
+        ];
+
+        let titleIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let isPaused = false;
+
+        function typeTitle() {
+            const currentTitle = titles[titleIndex];
+            const currentChar = currentTitle.substring(0, charIndex);
+
+            // Add blinking cursor
+            document.title = currentChar + (charIndex < currentTitle.length || isDeleting ? '|' : '');
+
+            // Pause at the end of typing
+            if (!isDeleting && charIndex === currentTitle.length) {
+                isPaused = true;
+                setTimeout(() => {
+                    isPaused = false;
+                    isDeleting = true;
+                    typeTitle();
+                }, 2000); // Pause for 2 seconds
+                return;
+            }
+
+            // Pause before starting next word
+            if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                titleIndex = (titleIndex + 1) % titles.length;
+                setTimeout(() => typeTitle(), 500); // Short pause before next title
+                return;
+            }
+
+            // Continue typing or deleting
+            if (!isPaused) {
+                if (isDeleting) {
+                    charIndex--;
+                } else {
+                    charIndex++;
+                }
+
+                // Typing speed varies for more natural effect
+                const speed = isDeleting ? 50 : (100 + Math.random() * 50);
+                setTimeout(typeTitle, speed);
+            }
+        }
+
+        // Start the typewriter effect after page loads
+        setTimeout(typeTitle, 1000);
+    })();
 </script>
 </body>
 </html>
