@@ -1,0 +1,2014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Crash - Professional C# .NET Developer specializing in Rust game plugins, Harmony framework, and UI development">
+    <meta name="keywords" content="C# developer, .NET, Rust plugins, Harmony framework, UI development, game development">
+    <title>Crash | C# .NET & Rust Plugin Developer</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        *::-webkit-scrollbar {
+            display: none;
+        }
+
+        :root {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #0f0f0f;
+            --bg-card: rgba(25, 25, 25, 0.95);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --accent: #cd412b;
+            --accent-glow: #ff6b4a;
+            --border: rgba(255, 255, 255, 0.1);
+            --code-bg: #1e1e1e;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Noise Overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            z-index: 1;
+            pointer-events: none;
+            background: url('data:image/svg+xml,%3Csvg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="4" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+        }
+
+        .container {
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 3rem;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.9), rgba(0,0,0,0.3), transparent);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: fadeInDown 1s ease-out;
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg,
+            transparent,
+            rgba(205, 65, 43, 0.5),
+            rgba(205, 65, 43, 0.8),
+            rgba(205, 65, 43, 0.5),
+            transparent);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-brand > span {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            position: relative;
+        }
+
+        .nav-brand > span::after {
+            content: '_';
+            position: absolute;
+            right: -12px;
+            animation: navBlink 1s infinite;
+        }
+
+        @keyframes navBlink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .nav-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid var(--accent);
+            box-shadow: 0 0 20px rgba(205, 65, 43, 0.5);
+            transition: all 0.3s;
+        }
+
+        .nav-avatar:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(205, 65, 43, 0.8);
+        }
+
+        .nav-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.875rem;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--accent);
+            text-shadow: 0 0 10px rgba(205, 65, 43, 0.5);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .buy-button {
+            background: linear-gradient(135deg, var(--accent), var(--accent-glow));
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .buy-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .buy-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .buy-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(205, 65, 43, 0.5);
+        }
+
+        /* Hero Section with Video Background */
+        .hero {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 5%;
+            overflow: hidden;
+        }
+
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -3;
+        }
+
+        .video-background video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center,
+            rgba(205, 65, 43, 0.1) 0%,
+            rgba(0,0,0,0.4) 40%,
+            rgba(0,0,0,0.8) 100%),
+            linear-gradient(180deg,
+                    rgba(0,0,0,0.3) 0%,
+                    rgba(205, 65, 43, 0.2) 50%,
+                    rgba(0,0,0,0.9) 100%);
+            z-index: -2;
+        }
+
+        /* Animated gradient overlay */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(90deg,
+            transparent,
+            rgba(205, 65, 43, 0.1),
+            transparent);
+            animation: sweep 8s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes sweep {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(50%); }
+        }
+
+        .hero-content {
+            display: flex;
+            align-items: center;
+            gap: 6rem;
+            animation: fadeInUp 3s ease-out;
+            margin-top: 5rem;
+            position: relative;
+            z-index: 5;
+            width: 100%;
+        }
+
+        .hero-text {
+            flex: 1;
+            max-width: 600px;
+            padding-right: 2rem;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900;
+            line-height: 0.9;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+        }
+
+        .hero-title span {
+            display: block;
+            animation: slideInLeft 1s ease-out forwards;
+            position: relative;
+            background: linear-gradient(180deg,
+            var(--text-primary) 0%,
+            var(--text-primary) 50%,
+            var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 30px rgba(205, 65, 43, 0.3));
+        }
+
+        .hero-title span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .hero-title span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        /* Typewriter Effect */
+        .typewriter-container {
+            margin: 1.5rem 0 2rem;
+            min-height: 120px;
+            max-width: 100%;
+            padding: 0 0.5rem;
+        }
+
+        .typewriter {
+            display: block;
+            overflow: hidden;
+            white-space: nowrap;
+            margin: 0.3rem 0;
+            width: 0;
+            opacity: 0;
+            border-right: 3px solid transparent;
+            max-width: fit-content;
+        }
+
+        .typewriter.line1 {
+            animation: typing 2.5s steps(67, end) 0.5s forwards,
+            showCaret 0s linear 0.5s forwards,
+            hideCaret 0s linear 3s forwards;
+        }
+
+        .typewriter.line2 {
+            animation: typing 3s steps(72, end) 3s forwards,
+            showCaret 0s linear 3s forwards,
+            hideCaret 0s linear 6s forwards;
+        }
+
+        .typewriter.line1, .typewriter.line2 {
+            display: block;
+        }
+
+        .typewriter.line3 {
+            animation: typing3 1.8s steps(29, end) 6s forwards,
+            showCaret 0s linear 6s forwards,
+            blink-caret 0.75s step-end infinite 7.8s;
+            display: inline-block;
+        }
+
+        @keyframes typing {
+            from {
+                width: 0;
+                opacity: 1;
+            }
+            to {
+                width: 120%;
+                opacity: 1;
+            }
+        }
+
+        @keyframes typing3 {
+            from {
+                width: 0;
+                opacity: 1;
+            }
+            to {
+                width: 280px;
+                opacity: 1;
+            }
+        }
+
+        @keyframes showCaret {
+            to { border-right-color: var(--accent); }
+        }
+
+        @keyframes hideCaret {
+            to { border-right-color: transparent; }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-right-color: transparent }
+            50% { border-right-color: var(--accent) }
+        }
+
+        /* Animated Counter */
+        .counter {
+            display: inline-block;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Floating Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 50%;
+            opacity: 0;
+            animation: float 10s infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.4;
+            }
+            90% {
+                opacity: 0.4;
+            }
+            100% {
+                transform: translateY(-100vh) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* Scroll Progress Indicator */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-glow));
+            z-index: 10000;
+            transition: width 0.1s;
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        /* Glitch Effect */
+        .glitch {
+            position: relative;
+            color: var(--text-primary);
+            font-size: inherit;
+            font-weight: inherit;
+            text-transform: inherit;
+            letter-spacing: inherit;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.8;
+        }
+
+        .glitch::before {
+            animation: glitch-1 0.5s infinite;
+            color: var(--accent);
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        .glitch::after {
+            animation: glitch-2 0.5s infinite;
+            color: var(--accent-glow);
+            z-index: -2;
+            opacity: 0.5;
+        }
+
+        @keyframes glitch-1 {
+            0%, 100% {
+                clip-path: inset(0 0 0 0);
+                transform: translate(0);
+            }
+            20% {
+                clip-path: inset(33% 0 60% 0);
+                transform: translate(-2px, 2px);
+            }
+        }
+
+        @keyframes glitch-2 {
+            0%, 100% {
+                clip-path: inset(0 0 0 0);
+                transform: translate(0);
+            }
+            20% {
+                clip-path: inset(60% 0 33% 0);
+                transform: translate(2px, -2px);
+            }
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            max-width: 100%;
+            overflow: visible;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        /* 3D Code Editor */
+        .code-editor-3d {
+            flex: 1;
+            perspective: 1000px;
+            animation: fadeInUp 1.8s ease-out;
+        }
+
+        .code-editor {
+            background: rgba(30, 30, 30, 0.95);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
+            cursor: grab;
+            border: 1px solid rgba(205, 65, 43, 0.2);
+            animation: gentleRotate 20s ease-in-out infinite;
+        }
+
+        @keyframes gentleRotate {
+            0%, 100% { transform: rotateY(-10deg) rotateX(5deg); }
+            25% { transform: rotateY(10deg) rotateX(-5deg); }
+            50% { transform: rotateY(-5deg) rotateX(10deg); }
+            75% { transform: rotateY(5deg) rotateX(-10deg); }
+        }
+
+        .code-editor:hover {
+            animation-play-state: paused;
+        }
+
+        .code-editor:active {
+            cursor: grabbing;
+            animation: none;
+        }
+
+        .editor-header {
+            background: rgba(45, 45, 45, 0.95);
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(205, 65, 43, 0.1);
+        }
+
+        .editor-dots {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .editor-title {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .code-content {
+            padding: 1.5rem;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            overflow: auto;
+            max-height: 400px;
+            background: rgba(13, 17, 23, 0.95);
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .code-content::-webkit-scrollbar {
+            display: none;
+        }
+
+        .code-line {
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+            white-space: pre;
+        }
+
+        .code-line:nth-child(1) { animation-delay: 0.1s; }
+        .code-line:nth-child(2) { animation-delay: 0.2s; }
+        .code-line:nth-child(3) { animation-delay: 0.3s; }
+        .code-line:nth-child(4) { animation-delay: 0.4s; }
+        .code-line:nth-child(5) { animation-delay: 0.5s; }
+        .code-line:nth-child(6) { animation-delay: 0.6s; }
+        .code-line:nth-child(7) { animation-delay: 0.7s; }
+        .code-line:nth-child(8) { animation-delay: 0.8s; }
+        .code-line:nth-child(9) { animation-delay: 0.9s; }
+        .code-line:nth-child(10) { animation-delay: 1s; }
+        .code-line:nth-child(11) { animation-delay: 1.1s; }
+        .code-line:nth-child(12) { animation-delay: 1.2s; }
+        .code-line:nth-child(13) { animation-delay: 1.3s; }
+        .code-line:nth-child(14) { animation-delay: 1.4s; }
+
+        .keyword { color: #ff79c6; }
+        .class-name { color: #8be9fd; }
+        .string { color: #f1fa8c; }
+        .type { color: #8be9fd; }
+        .comment { color: #6272a4; }
+        .method { color: #50fa7b; }
+        .namespace { color: #bd93f9; }
+
+        .hero-button {
+            padding: 1rem 2rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-button-primary {
+            background: linear-gradient(135deg, var(--accent), var(--accent-glow));
+            color: white;
+            box-shadow: 0 5px 20px rgba(205, 65, 43, 0.3);
+        }
+
+        .hero-button-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(205, 65, 43, 0.5);
+        }
+
+        .hero-button-secondary {
+            background: rgba(255,255,255,0.05);
+            color: white;
+            border-color: rgba(255,255,255,0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-button-secondary:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: var(--accent);
+            box-shadow: 0 0 30px rgba(205, 65, 43, 0.3);
+        }
+
+        /* About Section */
+        .about-section {
+            padding: 8rem 0;
+            background: linear-gradient(180deg,
+            var(--bg-primary) 0%,
+            #141414 50%,
+            var(--bg-secondary) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle,
+            rgba(205, 65, 43, 0.05) 0%,
+            transparent 70%);
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(90deg,
+            var(--text-primary),
+            var(--accent),
+            var(--text-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% auto;
+            animation: shine 3s linear infinite;
+        }
+
+        @keyframes shine {
+            to {
+                background-position: 200% center;
+            }
+        }
+
+        .section-underline {
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-glow));
+            margin: 0 auto 4rem;
+            box-shadow: 0 0 20px rgba(205, 65, 43, 0.5);
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .about-text {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .about-text p {
+            margin-bottom: 1.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg,
+            rgba(205, 65, 43, 0.1),
+            rgba(25, 25, 25, 0.95));
+            padding: 2rem;
+            border-radius: 4px;
+            text-align: center;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,
+            transparent,
+            rgba(205, 65, 43, 0.3),
+            transparent);
+            transition: left 0.5s;
+        }
+
+        .stat-card:hover::before {
+            left: 100%;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(205, 65, 43, 0.3);
+            border-color: var(--accent);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            color: var(--accent);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 20px rgba(205, 65, 43, 0.5);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-size: 0.875rem;
+            letter-spacing: 1px;
+        }
+
+        /* Services Section with Horizontal Scroll */
+        .services-section {
+            padding: 8rem 0;
+            background: linear-gradient(180deg,
+            var(--bg-secondary) 0%,
+            rgba(205, 65, 43, 0.02) 50%,
+            var(--bg-secondary) 100%);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .services-section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 100px,
+                    rgba(205, 65, 43, 0.02) 100px,
+                    rgba(205, 65, 43, 0.02) 200px
+            );
+            pointer-events: none;
+        }
+
+        .services-wrapper {
+            overflow: hidden;
+            margin-top: 4rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .services-track {
+            display: flex;
+            animation: scrollHorizontal 30s linear infinite;
+        }
+
+        .services-track:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes scrollHorizontal {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .service-card {
+            flex: 0 0 320px;
+            background: linear-gradient(135deg,
+            rgba(25, 25, 25, 0.95),
+            rgba(205, 65, 43, 0.05));
+            padding: 2.5rem;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            margin-right: 2rem;
+            transition: all 0.3s;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg,
+            var(--accent),
+            transparent,
+            var(--accent));
+            border-radius: 4px;
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s;
+        }
+
+        .service-card:hover::after {
+            opacity: 1;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(205, 65, 43, 0.3);
+        }
+
+        .service-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+            filter: drop-shadow(0 0 10px rgba(205, 65, 43, 0.5));
+        }
+
+        .service-title {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .service-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        /* Featured Work Section */
+        .featured-section {
+            padding: 8rem 0;
+            background: linear-gradient(180deg,
+            var(--bg-primary) 0%,
+            rgba(205, 65, 43, 0.03) 50%,
+            var(--bg-primary) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .featured-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: repeating-linear-gradient(
+                    45deg,
+                    transparent,
+                    transparent 35px,
+                    rgba(205, 65, 43, 0.01) 35px,
+                    rgba(205, 65, 43, 0.01) 70px
+            );
+            pointer-events: none;
+        }
+
+        .featured-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .featured-card {
+            background: linear-gradient(135deg,
+            rgba(25, 25, 25, 0.95),
+            rgba(205, 65, 43, 0.1));
+            border-radius: 4px;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            position: relative;
+            opacity: 0;
+            animation: fadeInUp 0.8s forwards;
+            height: 100%;
+        }
+
+        /* Custom styling for Magic Services card */
+        .featured-card.magic-services {
+            background: linear-gradient(135deg,
+            rgba(25, 25, 25, 0.95),
+            rgba(138, 43, 226, 0.1));
+        }
+
+        .featured-card.magic-services:hover {
+            box-shadow: 0 30px 60px rgba(138, 43, 226, 0.3);
+            border-color: #8a2be2;
+        }
+
+        .featured-card.magic-services .featured-stat {
+            color: #8a2be2;
+            text-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+        }
+
+        .featured-card.magic-services .featured-image::after {
+            background: radial-gradient(circle,
+            rgba(138, 43, 226, 0.4) 0%,
+            transparent 70%);
+        }
+
+        .featured-card.magic-services .featured-logo {
+            filter: drop-shadow(0 0 30px rgba(138, 43, 226, 0.5));
+        }
+
+        .featured-card.magic-services .badge {
+            background: linear-gradient(135deg,
+            rgba(0,0,0,0.7),
+            rgba(138, 43, 226, 0.2));
+            border: 1px solid rgba(138, 43, 226, 0.3);
+        }
+
+        .featured-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg,
+            transparent 30%,
+            rgba(205, 65, 43, 0.1) 50%,
+            transparent 70%);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .featured-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .featured-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(205, 65, 43, 0.4);
+            border-color: var(--accent);
+        }
+
+        .featured-card.magic-services:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(138, 43, 226, 0.4);
+            border-color: #8a2be2;
+        }
+
+        .featured-image {
+            height: 200px;
+            background: linear-gradient(135deg,
+            rgba(205, 65, 43, 0.3),
+            rgba(0,0,0,0.9)),
+            radial-gradient(circle at center,
+                    rgba(205, 65, 43, 0.2),
+                    transparent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .featured-image::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle,
+            rgba(205, 65, 43, 0.4) 0%,
+            transparent 70%);
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.6s;
+            pointer-events: none;
+        }
+
+        .featured-card:hover .featured-image::after {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .featured-logo {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 30px rgba(205, 65, 43, 0.5));
+            transition: transform 0.3s, filter 0.3s;
+            position: relative;
+            z-index: 1;
+            animation: logoGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes logoGlow {
+            0%, 100% { filter: drop-shadow(0 0 20px rgba(205, 65, 43, 0.3)); }
+            50% { filter: drop-shadow(0 0 40px rgba(205, 65, 43, 0.6)); }
+        }
+
+        .featured-card.magic-services .featured-logo {
+            animation: magicLogoGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes magicLogoGlow {
+            0%, 100% { filter: drop-shadow(0 0 20px rgba(138, 43, 226, 0.3)); }
+            50% { filter: drop-shadow(0 0 40px rgba(138, 43, 226, 0.6)); }
+        }
+
+        .featured-card:hover .featured-logo {
+            transform: scale(1.1) rotate(5deg);
+            animation-play-state: paused;
+        }
+
+        .platform-badges {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .badge {
+            background: linear-gradient(135deg,
+            rgba(0,0,0,0.7),
+            rgba(205, 65, 43, 0.2));
+            padding: 0.25rem 0.75rem;
+            border-radius: 2px;
+            font-size: 0.75rem;
+            backdrop-filter: blur(10px);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid rgba(205, 65, 43, 0.3);
+        }
+
+        .featured-content {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .featured-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .featured-description {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            min-height: 60px;
+            flex: 1;
+        }
+
+        .featured-stats {
+            display: flex;
+            gap: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            flex-wrap: wrap;
+            margin-top: auto;
+        }
+
+        .featured-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(205, 65, 43, 0.3);
+            font-size: 0.875rem;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            padding: 8rem 0;
+            background: linear-gradient(180deg,
+            var(--bg-secondary) 0%,
+            #0a0a0a 100%);
+            position: relative;
+        }
+
+        .contact-subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+        }
+
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg,
+            rgba(25, 25, 25, 0.95),
+            rgba(205, 65, 43, 0.02));
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-input:hover {
+            border-color: rgba(205, 65, 43, 0.5);
+            box-shadow: 0 0 20px rgba(205, 65, 43, 0.1);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 30px rgba(205, 65, 43, 0.2);
+        }
+
+        .form-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-label svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(180deg,
+            #0a0a0a 0%,
+            var(--bg-primary) 100%);
+            padding: 3rem 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-content {
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Matrix Rain Effect (optional) */
+        .matrix-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.1;
+        }
+
+        .matrix-column {
+            position: absolute;
+            top: -100%;
+            font-family: monospace;
+            font-size: 14px;
+            color: var(--accent);
+            animation: matrix-fall linear infinite;
+            white-space: nowrap;
+        }
+
+        @keyframes matrix-fall {
+            to {
+                transform: translateY(200vh);
+            }
+        }
+
+        /* Typing Indicator */
+        .typing-indicator {
+            display: inline-flex;
+            gap: 4px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: typing-bounce 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing-bounce {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-10px);
+            }
+        }
+        @media (max-width: 1024px) {
+            .hero-content {
+                flex-direction: column;
+                gap: 3rem;
+            }
+
+            .hero-text {
+                max-width: 100%;
+                text-align: center;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .code-editor-3d {
+                width: 100%;
+                max-width: 500px;
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero-content {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .hero-text {
+                max-width: 100%;
+                padding-right: 0;
+            }
+
+            .code-editor-3d {
+                width: 100%;
+                max-width: 400px;
+                margin: 0 auto;
+            }
+
+            .hero-title {
+                font-size: 3rem;
+            }
+
+            .typewriter-container {
+                min-height: 150px;
+            }
+
+            .typewriter {
+                font-size: 1rem;
+                line-height: 1.6;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+
+            .services-track {
+                animation-duration: 20s;
+            }
+
+            .featured-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Loading Screen -->
+<div class="loader" id="loader">
+    <div class="loader-content">
+        <div class="loader-logo"></div>
+        <div class="loader-text">LOADING</div>
+    </div>
+</div>
+
+<!-- Scroll Progress Bar -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- Custom Cursor -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-outline" id="cursorOutline"></div>
+
+<!-- Floating Particles -->
+<div class="particles" id="particles"></div>
+
+<!-- Matrix Rain Effect (Optional - uncomment to enable) -->
+<!-- <canvas id="matrix-rain" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; opacity: 0.05;"></canvas> -->
+
+<!-- Navigation -->
+<nav class="navbar">
+    <div class="nav-brand">
+        <div class="nav-avatar">
+            <img src="YOUR_AVATAR_URL_HERE" alt="Crash">
+        </div>
+        <span style="font-size: 1.5rem; font-weight: 700; color: var(--accent);">CRASH</span>
+    </div>
+    <div class="nav-links">
+        <a href="#top" class="nav-link">START</a>
+        <a href="#about" class="nav-link">ABOUT ME</a>
+        <a href="#services" class="nav-link">SERVICES</a>
+        <a href="#contact" class="nav-link">CONTACT</a>
+        <a href="https://codefling.com/crash" target="_blank" class="buy-button">VIEW WORK</a>
+    </div>
+</nav>
+
+<!-- Hero Section with Video Background -->
+<section class="hero" id="top">
+    <div class="video-background">
+        <video autoplay muted loop playsinline>
+            <source src="https://files.facepunch.com/paddy/20210324/rust_site2021_hero_v002.mp4" type="video/mp4">
+        </video>
+    </div>
+    <div class="video-overlay"></div>
+
+    <div class="container">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">
+                    <span class="glitch" data-text="DEVELOP">DEVELOP</span>
+                    <span class="glitch" data-text="BUILD">BUILD</span>
+                    <span class="glitch" data-text="DEPLOY">DEPLOY</span>
+                </h1>
+                <div class="hero-subtitle typewriter-container">
+                    <span class="typewriter line1">Professional C# .NET developer specializing in Rust game plugins.</span>
+                    <span class="typewriter line2">Creating high-performance solutions with Harmony framework expertise</span>
+                    <span class="typewriter line3">and advanced UI development.</span>
+                </div>
+                <div class="hero-buttons" style="opacity: 0; animation: fadeIn 1s forwards 7s;">
+                    <a href="https://codefling.com/crash" target="_blank" class="hero-button hero-button-primary">VIEW PLUGINS</a>
+                    <a href="#contact" class="hero-button hero-button-secondary">GET IN TOUCH</a>
+                </div>
+            </div>
+
+            <div class="code-editor-3d" id="codeEditor3D">
+                <div class="code-editor">
+                    <div class="editor-header">
+                        <div class="editor-dots">
+                            <span class="dot dot-red"></span>
+                            <span class="dot dot-yellow"></span>
+                            <span class="dot dot-green"></span>
+                        </div>
+                        <span class="editor-title">AutoRestart.cs</span>
+                    </div>
+                    <div class="code-content">
+                        <div class="code-line"><span class="keyword">using</span> Facepunch;</div>
+                        <div class="code-line"><span class="keyword">using</span> Network;</div>
+                        <div class="code-line"><span class="keyword">using</span> Newtonsoft.Json;</div>
+                        <div class="code-line"><span class="keyword">using</span> Oxide.Core;</div>
+                        <div class="code-line"><span class="keyword">using</span> Oxide.Core.Plugins;</div>
+                        <div class="code-line"><span class="keyword">using</span> Oxide.Game.Rust.Cui;</div>
+                        <div class="code-line"><span class="keyword">using</span> System;</div>
+                        <div class="code-line"><span class="keyword">using</span> System.Collections.Generic;</div>
+                        <div class="code-line"><span class="keyword">using</span> System.Linq;</div>
+                        <div class="code-line"><span class="keyword">using</span> UnityEngine;</div>
+                        <div class="code-line"></div>
+                        <div class="code-line"><span class="keyword">namespace</span> <span class="namespace">Oxide.Plugins</span></div>
+                        <div class="code-line">{</div>
+                        <div class="code-line">    [<span class="type">Info</span>(<span class="string">"AutoRestart"</span>, <span class="string">"crash"</span>, <span class="string">"1.0.0"</span>)]</div>
+                        <div class="code-line">    [<span class="type">Description</span>(<span class="string">"Schedule server restarts with highly customizable UI, notifications and player rewards"</span>)]</div>
+                        <div class="code-line">    </div>
+                        <div class="code-line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="class-name">AutoRestart</span> : <span class="type">RustPlugin</span></div>
+                        <div class="code-line">    {</div>
+                        <div class="code-line">        <span class="comment">// Advanced UI integration</span></div>
+                        <div class="code-line">        <span class="keyword">private</span> <span class="keyword">void</span> <span class="method">Init</span>()</div>
+                        <div class="code-line">        {</div>
+                        <div class="code-line">            <span class="comment">// Initialize trading system</span></div>
+                        <div class="code-line">        }</div>
+                        <div class="code-line">    }</div>
+                        <div class="code-line">}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section class="about-section" id="about">
+    <div class="container">
+        <h2 class="section-title">About Me</h2>
+        <div class="section-underline"></div>
+
+        <div class="about-content">
+            <div class="about-text">
+                <p>
+                    I'm a passionate C# .NET developer with extensive experience in
+                    creating high-performance applications and specialized game plugins.
+                    My expertise lies in developing sophisticated UI plugins for the Rust
+                    game ecosystem, leveraging the power of the Harmony framework for
+                    seamless integration.
+                </p>
+                <p>
+                    With years of experience in both enterprise-level .NET development and game
+                    modification, I bring a unique perspective that combines solid software engineering
+                    principles with the creative demands of game development. Every plugin is crafted
+                    with performance, reliability, and user experience in mind.
+                </p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number"><span class="counter" data-target="5">2</span>+</div>
+                    <div class="stat-label">Years Experience</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number"><span class="counter" data-target="50">50</span>+</div>
+                    <div class="stat-label">Public & Private Plugins Created</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number"><span class="counter" data-target="10">1</span>K+</div>
+                    <div class="stat-label">Total Downloads</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Section with Horizontal Scroll -->
+<section class="services-section" id="services">
+    <div class="container">
+        <h2 class="section-title">Services & Expertise</h2>
+        <div class="section-underline"></div>
+    </div>
+
+    <div class="services-wrapper">
+        <div class="services-track">
+            <!-- Original items -->
+            <div class="service-card">
+                <svg class="service-icon" viewBox="0 0 24 24">
+                    <path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/>
+                </svg>
+                <h3 class="service-title">C# .NET Development</h3>
+                <p class="service-description">
+                    Enterprise-grade applications utilizing modern .NET frameworks, ASP.NET Core, and Entity Framework. Creating scalable, maintainable solutions.
+                </p>
+            </div>
+
+            <div class="service-card">
+                <svg class="service-icon" viewBox="0 0 24 24">
+                    <path d="M13 3L4 14l9 9 9-11V3h-9zm3 8c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1z"/>
+                </svg>
+                <h3 class="service-title">Rust Plugin Development</h3>
+                <p class="service-description">
+                    Custom plugins for Rust servers, including gameplay mechanics, administrative tools, and performance optimization systems.
+                </p>
+            </div>
+
+            <div class="service-card">
+                <svg class="service-icon" viewBox="0 0 24 24">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+                <h3 class="service-title">Harmony Framework</h3>
+                <p class="service-description">
+                    Advanced runtime patching and code injection using Harmony, enabling deep integration and modification of game systems.
+                </p>
+            </div>
+
+            <div class="service-card">
+                <svg class="service-icon" viewBox="0 0 24 24">
+                    <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/>
+                </svg>
+                <h3 class="service-title">UI Development</h3>
+                <p class="service-description">
+                    Creating intuitive, responsive user interfaces for Rust plugins, delivering exceptional user experiences through clean UI solutions.
+                </p>
+            </div>
+
+            <div class="service-card">
+                <svg class="service-icon" viewBox="0 0 24 24">
+                    <path d="M9.4 10.5l4.77-8.26C13.47 2.09 12.75 2 12 2c-2.4 0-4.6.85-6.32 2.25l3.66 6.35.06-.1zM21.54 9c-.92-2.92-3.15-5.26-6-6.34L11.88 9h9.66zm.26 1h-7.49l.29.5 4.76 8.25C21 16.97 22 14.61 22 12c0-.69-.07-1.35-.2-2zM8.54 12l-3.9-6.75C3.01 7.03 2 9.39 2 12c0 .69.07 1.35.2 2h7.49l-1.15-2zm-6.08 3c.92 2.92 3.15 5.26 6 6.34L12.12 15H2.46zm11.27 0l-3.9 6.76c.7.15 1.42.24 2.17.24 2.4 0 4.6-.85 6.32-2.25l-3.66-6.35-.93 1.6z"/>
+                </svg>
+                <h3 class="service-title">Performance Optimization</h3>
+                <p class="service-description">
+                    Optimizing code for maximum efficiency, reducing server load, and ensuring smooth gameplay for thousands of players.
+                </p>
+            </div>
+
+            <div class="service-card">
+                <svg class="service-icon" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+                <h3 class="service-title">Quality Assurance</h3>
+                <p class="service-description">
+                    Comprehensive testing and debugging to ensure plugins are stable, secure, and compatible with the latest game updates.
+                </p>
+            </div>
+
+            <!-- Duplicate for seamless loop -->
+            <div class="service-card">
+                <svg class="service-icon" viewBox="0 0 24 24">
+                    <path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/>
+                </svg>
+                <h3 class="service-title">C# .NET Development</h3>
+                <p class="service-description">
+                    Enterprise-grade applications utilizing modern .NET frameworks, ASP.NET Core, and Entity Framework. Creating scalable, maintainable solutions.
+                </p>
+            </div>
+
+            <div class="service-card">
+                <svg class="service-icon" viewBox="0 0 24 24">
+                    <path d="M13 3L4 14l9 9 9-11V3h-9zm3 8c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1z"/>
+                </svg>
+                <h3 class="service-title">Rust Plugin Development</h3>
+                <p class="service-description">
+                    Custom plugins for Rust servers, including gameplay mechanics, administrative tools, and performance optimization systems.
+                </p>
+            </div>
+
+            <div class="service-card">
+                <svg class="service-icon" viewBox="0 0 24 24">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+                <h3 class="service-title">Harmony Framework</h3>
+                <p class="service-description">
+                    Advanced runtime patching and code injection using Harmony, enabling deep integration and modification of game systems.
+                </p>
+            </div>
+
+            <div class="service-card">
+                <svg class="service-icon" viewBox="0 0 24 24">
+                    <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/>
+                </svg>
+                <h3 class="service-title">UI Development</h3>
+                <p class="service-description">
+                    Creating intuitive, responsive user interfaces for Rust plugins, delivering exceptional user experiences through clean UI solutions.
+                </p>
+            </div>
+
+            <div class="service-card">
+                <svg class="service-icon" viewBox="0 0 24 24">
+                    <path d="M9.4 10.5l4.77-8.26C13.47 2.09 12.75 2 12 2c-2.4 0-4.6.85-6.32 2.25l3.66 6.35.06-.1zM21.54 9c-.92-2.92-3.15-5.26-6-6.34L11.88 9h9.66zm.26 1h-7.49l.29.5 4.76 8.25C21 16.97 22 14.61 22 12c0-.69-.07-1.35-.2-2zM8.54 12l-3.9-6.75C3.01 7.03 2 9.39 2 12c0 .69.07 1.35.2 2h7.49l-1.15-2zm-6.08 3c.92 2.92 3.15 5.26 6 6.34L12.12 15H2.46zm11.27 0l-3.9 6.76c.7.15 1.42.24 2.17.24 2.4 0 4.6-.85 6.32-2.25l-3.66-6.35-.93 1.6z"/>
+                </svg>
+                <h3 class="service-title">Performance Optimization</h3>
+                <p class="service-description">
+                    Optimizing code for maximum efficiency, reducing server load, and ensuring smooth gameplay for thousands of players.
+                </p>
+            </div>
+
+            <div class="service-card">
+                <svg class="service-icon" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+                <h3 class="service-title">Quality Assurance</h3>
+                <p class="service-description">
+                    Comprehensive testing and debugging to ensure plugins are stable, secure, and compatible with the latest game updates.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Work Section -->
+<section class="featured-section">
+    <div class="container">
+        <h2 class="section-title">Featured Work</h2>
+        <div class="section-underline"></div>
+        <p class="contact-subtitle">Explore my latest projects and services</p>
+
+        <div class="featured-grid">
+            <!-- CodeFling Card -->
+            <a href="https://codefling.com/crash" target="_blank" class="featured-card" style="animation-delay: 0.1s;">
+                <div class="featured-image">
+                    <img src="https://codefling.com/uploads/set_resources_13/cf0d9ad89a1246bdc528542aa98e2147_cf_logo_23_res.png"
+                         alt="CodeFling"
+                         class="featured-logo"
+                         loading="lazy">
+                    <div class="platform-badges">
+                        <span class="badge">Public</span>
+                        <span class="badge">Oxide</span>
+                        <span class="badge">Carbon</span>
+                        <span class="badge">Harmony</span>
+                    </div>
+                </div>
+                <div class="featured-content">
+                    <h3 class="featured-title">Codefling Profile</h3>
+                    <p class="featured-description">
+                        Premium Rust plugins marketplace. Browse and purchase my collection of
+                        high-quality plugins, UI systems, and performance optimizations.
+                    </p>
+                    <div class="featured-stats">
+                        <span class="featured-stat">10+ PLUGINS</span>
+                        <span class="featured-stat">1K+ DOWNLOADS</span>
+                        <span class="featured-stat">★ 5 RATING</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Magic Services Card -->
+            <a href="https://magicservices.co/" target="_blank" class="featured-card magic-services" style="animation-delay: 0.3s;">
+                <div class="featured-image">
+                    <img src="https://i.ibb.co/TBZQ78Ld/magic.png"
+                         alt="Magic Services"
+                         class="featured-logo"
+                         loading="lazy">
+                    <div class="platform-badges">
+                        <span class="badge">Private</span>
+                        <span class="badge">Oxide</span>
+                        <span class="badge">Carbon</span>
+                        <span class="badge">Harmony</span>
+                    </div>
+                </div>
+                <div class="featured-content">
+                    <h3 class="featured-title">Magic Services</h3>
+                    <p class="featured-description">
+                        Professional custom plugin development. Private commissions for unique
+                        server features, tailored solutions, and exclusive modifications.
+                    </p>
+                    <div class="featured-stats">
+                        <span class="featured-stat">CUSTOM WORK</span>
+                        <span class="featured-stat">FAST DELIVERY</span>
+                        <span class="featured-stat">1-ON-1 SUPPORT</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="contact-section" id="contact">
+    <div class="container">
+        <h2 class="section-title">Let's Work Together</h2>
+        <div class="section-underline"></div>
+
+        <p class="contact-subtitle">
+            Ready to discuss your project? Reach out through any of the channels below for professional
+            development services.
+        </p>
+
+        <div class="contact-form">
+            <div class="form-group">
+                <label class="form-label">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                    </svg>
+                    EMAIL
+                </label>
+                <div class="form-input">crash@crashplugins.space</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+                    </svg>
+                    DISCORD
+                </label>
+                <div class="form-input">craaaash</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                    </svg>
+                    AVAILABILITY
+                </label>
+                <div class="form-input">Mon - Fri, 9AM - 6PM GMT-4</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <p>&copy; 2025 Crash. Professional C# .NET Developer specializing in Rust game plugins development.</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Immediately hide loader as fallback
+    setTimeout(() => {
+        const loader = document.getElementById('loader');
+        if (loader && !loader.classList.contains('hidden')) {
+            loader.classList.add('hidden');
+            setTimeout(() => {
+                loader.style.display = 'none';
+            }, 500);
+        }
+    }, 3000); // Fallback after 3 seconds max
+
+    // Set avatar image - replace with your actual avatar URL
+    const avatarImg = document.querySelector('.nav-avatar img');
+    if (avatarImg) {
+        // Add your avatar URL here
+        avatarImg.src = 'https://i.ibb.co/cKstgqWj/ezgif-com-video-to-gif-converter.gif';
+    }
+
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    // 3D Code Editor interaction with rotation limits
+    const codeEditor = document.querySelector('.code-editor');
+    let isMouseDown = false;
+    let startX = 0;
+    let startY = 0;
+    let currentX = 0;
+    let currentY = 0;
+
+    // Set maximum rotation angles
+    const MAX_ROTATION_X = 30; // Maximum vertical rotation (degrees)
+    const MAX_ROTATION_Y = 45; // Maximum horizontal rotation (degrees)
+
+    if (codeEditor) {
+        codeEditor.addEventListener('mousedown', (e) => {
+            isMouseDown = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            codeEditor.style.cursor = 'grabbing';
+            codeEditor.style.animation = 'none';
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isMouseDown || !codeEditor) return;
+
+            e.preventDefault();
+
+            // Calculate rotation with limits
+            currentX = (e.clientX - startX) * 0.3;
+            currentY = (e.clientY - startY) * 0.3;
+
+            // Apply rotation limits
+            currentX = Math.max(-MAX_ROTATION_Y, Math.min(MAX_ROTATION_Y, currentX));
+            currentY = Math.max(-MAX_ROTATION_X, Math.min(MAX_ROTATION_X, currentY));
+
+            codeEditor.style.transform = `rotateY(${currentX}deg) rotateX(${-currentY}deg)`;
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (isMouseDown && codeEditor) {
+                isMouseDown = false;
+                codeEditor.style.cursor = 'grab';
+                setTimeout(() => {
+                    if (!isMouseDown) {
+                        codeEditor.style.animation = 'gentleRotate 20s ease-in-out infinite';
+                    }
+                }, 3000);
+            }
+        });
+
+        // Touch support for mobile with rotation limits
+        codeEditor.addEventListener('touchstart', (e) => {
+            isMouseDown = true;
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            codeEditor.style.animation = 'none';
+        });
+
+        codeEditor.addEventListener('touchmove', (e) => {
+            if (!isMouseDown) return;
+
+            e.preventDefault();
+
+            // Calculate rotation with limits
+            currentX = (e.touches[0].clientX - startX) * 0.3;
+            currentY = (e.touches[0].clientY - startY) * 0.3;
+
+            // Apply rotation limits
+            currentX = Math.max(-MAX_ROTATION_Y, Math.min(MAX_ROTATION_Y, currentX));
+            currentY = Math.max(-MAX_ROTATION_X, Math.min(MAX_ROTATION_X, currentY));
+
+            codeEditor.style.transform = `rotateY(${currentX}deg) rotateX(${-currentY}deg)`;
+        });
+
+        codeEditor.addEventListener('touchend', () => {
+            isMouseDown = false;
+            setTimeout(() => {
+                if (!isMouseDown && codeEditor) {
+                    codeEditor.style.animation = 'gentleRotate 20s ease-in-out infinite';
+                }
+            }, 3000);
+        });
+    }
+
+    // Parallax effect for video background
+    let scrolled = 0;
+    const parallax = document.querySelector('.video-background');
+
+    window.addEventListener('scroll', () => {
+        scrolled = window.pageYOffset;
+        if (parallax) {
+            parallax.style.transform = `translateY(${scrolled * 0.5}px)`;
+        }
+    });
+
+    // Scroll animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '0';
+                entry.target.style.animation = 'fadeInUp 1s forwards';
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    // Observe elements for animation
+    document.querySelectorAll('.stat-card, .featured-card').forEach(el => {
+        observer.observe(el);
+    });
+
+    // Add hover effect for featured logos
+    document.querySelectorAll('.featured-logo').forEach(logo => {
+        const img = new Image();
+        img.src = logo.src;
+
+        logo.addEventListener('error', function() {
+            this.style.display = 'none';
+            const fallback = document.createElement('div');
+            fallback.style.width = '120px';
+            fallback.style.height = '120px';
+            fallback.style.background = 'linear-gradient(135deg, var(--accent), var(--accent-glow))';
+            fallback.style.borderRadius = '8px';
+            fallback.style.display = 'flex';
+            fallback.style.alignItems = 'center';
+            fallback.style.justifyContent = 'center';
+            fallback.style.fontSize = '3rem';
+            fallback.style.fontWeight = '700';
+            fallback.textContent = this.alt.charAt(0);
+            this.parentElement.appendChild(fallback);
+        });
+    });
+</script>
+</body>
+</html>
